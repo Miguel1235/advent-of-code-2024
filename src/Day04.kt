@@ -1,4 +1,4 @@
-fun part1(input: List<List<Char>>): Int {
+private fun part1(input: List<List<Char>>): Int {
     val directions = listOf(
         0 to 1, 0 to -1, -1 to 0, 1 to 0, -1 to 1, 1 to -1, 1 to 1, -1 to -1
     )
@@ -17,7 +17,7 @@ fun part1(input: List<List<Char>>): Int {
     return allWords.count { it == "XMAS" }
 }
 
-fun part2(input: List<List<Char>>): Int {
+private fun part2(input: List<List<Char>>): Int {
     var total = 0
     for (r in input.indices) {
         for (c in input[r].indices) {
