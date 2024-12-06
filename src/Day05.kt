@@ -35,11 +35,11 @@ fun obtainUpdates(updates: List<List<Int>>, rules: List<String>, validOnes: Bool
     return if (validOnes) valid else invalid
 }
 
-val p1 = { updates: List<List<Int>>, rules: List<String> -> obtainUpdates(updates, rules).sumOf { it[it.size / 2] } }
+private val part1 = { updates: List<List<Int>>, rules: List<String> -> obtainUpdates(updates, rules).sumOf { it[it.size / 2] } }
 
 val missing = { left: Int, right: Int, rules: List<String> -> "$left|$right" !in rules }
 
-fun part2(updates: List<List<Int>>, rules: List<String>): Int {
+private fun part2(updates: List<List<Int>>, rules: List<String>): Int {
     val invalidOnes = obtainUpdates(updates, rules, false).map { it.toMutableList() }
     val validOnes = mutableListOf<List<Int>>()
     for (update in invalidOnes) {
@@ -64,11 +64,11 @@ fun part2(updates: List<List<Int>>, rules: List<String>): Int {
 fun main() {
     val testInput = readInput("Day05_test")
     val (testUpdates, testRules) = parseInput(testInput)
-    check(p1(testUpdates, testRules) == 143)
+    check(part1(testUpdates, testRules) == 143)
     check(part2(testUpdates, testRules) == 123)
 
     val input = readInput("Day05")
     val (updates, rules) = parseInput(input)
-    check(p1(updates, rules) == 5275)
+    check(part1(updates, rules) == 5275)
     check(part2(updates, rules) == 6191)
 }

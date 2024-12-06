@@ -1,13 +1,13 @@
 import kotlin.math.abs
 
-val part1 = { reports: List<String> ->
+private val part1 = { reports: List<String> ->
     reports.count { report ->
         val level = report.split(" ").map(String::toInt)
         isTheLevelSafe(level)
     }
 }
 
-val part2 = { reports: List<String> ->
+private val part2 = { reports: List<String> ->
     reports.fold(0) { acc, report ->
         val level = report.split(" ").map(String::toInt)
         if (isTheLevelSafe(level)) {

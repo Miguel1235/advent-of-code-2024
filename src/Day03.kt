@@ -1,4 +1,4 @@
-fun part(memory: String, withDos: Boolean = false): Long {
+private fun part(memory: String, withDos: Boolean = false): Long {
     val memoryRegex = Regex("""mul\((\d+),(\d+)\)|don't\(\)|do\(\)""")
     var isMulEnabled = true
 
