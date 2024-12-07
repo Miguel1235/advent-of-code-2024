@@ -1,12 +1,11 @@
-private fun part1(input: List<String>): Long {
+private fun part(input: List<String>, part1: Boolean = true): Long {
     val trueValues = mutableListOf<Long>()
-
     for (line in input) {
         val (targetS, numbersS) = line.split(":")
         val target = targetS.toLong()
         val numbers = numbersS.trim().split(" ").map { it.toLong() }
-        val combinations = generateCombinations(listOf("*", "+"), numbers.size-1)
-
+        val ops = if(part1) listOf("*", "+") else listOf("*", "+", "|")
+        val combinations = generateCombinations(ops, numbers.size-1)
 
         for(combination in combinations) {
             var total = numbers[0]
@@ -16,13 +15,12 @@ private fun part1(input: List<String>): Long {
                 when(operator) {
                     "*" -> total *= numbers[i]
                     "+" -> total += numbers[i]
+                    "|" -> total = "$total${numbers[i]}".toLong()
                 }
             }
             if(total == target) {
-//                println("The target is $target and the numbers are $numbers, with ops: $combinations")
                 trueValues.add(target)
                 break
-
             }
         }
     }
@@ -47,8 +45,10 @@ fun generateCombinations(operations: List<String>, size: Int): List<List<String>
 
 fun main() {
     val testInput = readInput("Day07_test")
-    check(part1(testInput) == 3749L)
+    check(part(testInput) == 3749L)
+    check(part(testInput, false) == 11387L)
 
     val input = readInput("Day07")
-    check(part1(input) == 5837374519342L)
+    check(part(input) == 5837374519342L)
+    check(part(input, false) == 492383931650959)
 }

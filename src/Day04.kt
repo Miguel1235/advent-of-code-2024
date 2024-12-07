@@ -1,4 +1,4 @@
-private fun part1(input: List<List<Char>>): Int {
+private fun part(input: List<List<Char>>): Int {
     val directions = listOf(
         0 to 1, 0 to -1, -1 to 0, 1 to 0, -1 to 1, 1 to -1, 1 to 1, -1 to -1
     )
@@ -39,6 +39,6 @@ private fun part2(input: List<List<Char>>): Int {
 
 fun main() {
     val input = readInput("Day04").map { it.toList() }
-    part1(input)
+    part(input)
     part2(input)
 }

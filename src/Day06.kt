@@ -1,4 +1,4 @@
-private fun part1(input: List<List<Char>>): Int {
+private fun part(input: List<List<Char>>): Int {
     val allCords: MutableList<Pair<Int, Int>> = mutableListOf(findCurrentCord(input))
     var currentDirection = Directions.UP
 
@@ -152,10 +152,10 @@ private fun canMoveGuard(input: List<List<Char>>, cord: Pair<Int, Int>, dir: Dir
 
 fun main() {
     val testInput = readInput("Day06_test").map { it.toList() }
-    check(part1(testInput)==41)
+    check(part(testInput) ==41)
     check(part2(testInput)==6)
 
     val input = readInput("Day06").map { it.toList() }
-    check(part1(input) == 5131)
+    check(part(input) == 5131)
     check(part2(input) == 1784)
 }
