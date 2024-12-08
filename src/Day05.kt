@@ -1,4 +1,4 @@
-fun parseInput(input: List<String>): Pair<List<List<Int>>, List<String>> {
+private fun parseInput(input: List<String>): Pair<List<List<Int>>, List<String>> {
     val updates = mutableListOf<List<Int>>()
     val rules = mutableListOf<String>()
     for (line in input) {
