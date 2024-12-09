@@ -33,15 +33,15 @@ private fun part2(input: List<String>): Int {
     return 0
 }
 
- fun main() {
-     val testInput = readInput("Day${newDayNum}_test")
-     check(part1(testInput) == 0)
-     check(part2(testInput) == 0)
+fun main() {
+    val testInput = readInput("Day${newDayNum}_test")
+    check(part1(testInput) == 0)
+    check(part2(testInput) == 0)
      
-     val input = readInput("Day$newDayNum")
-     check(part1(input) == 0)
-     check(part2(input) == 0)
- }
+    val input = readInput("Day$newDayNum")
+    check(part1(input) == 0)
+    check(part2(input) == 0)
+}
  """
             )
 
