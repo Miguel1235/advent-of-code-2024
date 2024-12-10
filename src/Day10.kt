@@ -3,8 +3,8 @@ data class Graph(val nodes: Map<Node, List<Node>>)
 
 private fun obtainPositions(input: List<String>): Map<Node, Int> {
     val positions = mutableMapOf<Node, Int>()
-    for(row in input.indices) {
-        for(col in input[row].indices) {
+    for (row in input.indices) {
+        for (col in input[row].indices) {
             positions[Node(row, col)] = input[row][col].digitToInt()
         }
     }
@@ -19,9 +19,7 @@ private fun parseInput(positions: Map<Node, Int>): Graph {
             Node(node.row - 1, node.col),
             Node(node.row, node.col + 1),
             Node(node.row, node.col - 1)
-        )
-            .filter { it in positions }
-            .filter { value + 1 == positions[(Node(it.row, it.col))] }
+        ).filter { it in positions }.filter { value + 1 == positions[(Node(it.row, it.col))] }
         nodes[node] = neighbors.toMutableList()
     }
     return Graph(nodes)
@@ -30,7 +28,7 @@ private fun parseInput(positions: Map<Node, Int>): Graph {
 private fun findStartNodes(positions: Map<Node, Int>): List<Node> {
     val startNodes = mutableListOf<Node>()
     for ((node, value) in positions) {
-        if(value == 0) startNodes.add(node)
+        if (value == 0) startNodes.add(node)
     }
     return startNodes
 }
@@ -39,16 +37,12 @@ private fun findPaths(graph: Graph, start: Node, positions: Map<Node, Int>): Lis
     val paths = mutableListOf<List<Node>>()
 
     fun dfs(current: Node, visited: MutableSet<Node> = mutableSetOf(), path: MutableList<Node> = mutableListOf()) {
-        if (visited.contains(current)) return
-
         visited.add(current)
         path.add(current)
-
-        if (positions[current] == 9) {
-            paths.add(path.toList())
-        } else {
-            graph.nodes[current]?.forEach { neighbor ->
-                dfs(neighbor, visited.toMutableSet(), path.toMutableList())
+        when(positions[current]) {
+            9 -> paths.add(path)
+            else -> graph.nodes[current]?.forEach { neighbor ->
+                dfs(neighbor, visited, path)
             }
         }
     }
@@ -63,12 +57,9 @@ private fun part(input: List<String>, part1: Boolean = true): Int {
 
     return findStartNodes(positions).sumOf {
         val paths = findPaths(graph, it, positions)
-        if(!part1) paths.size
+        if (!part1) paths.size
         else {
-            paths.flatten()
-                .filter { positions[it] == 9 }
-                .toSet()
-                .count()
+            paths.flatten().filter { positions[it] == 9 }.toSet().count()
         }
     }
 }
