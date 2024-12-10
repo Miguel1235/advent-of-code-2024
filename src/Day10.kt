@@ -1,8 +1,4 @@
-data class Node(val row: Int, val col: Int) {
-    override fun toString(): String {
-        return "$row:$col"
-    }
-}
+data class Node(val row: Int, val col: Int)
 data class Graph(val nodes: Map<Node, List<Node>>)
 
 private fun obtainPositions(input: List<String>): Map<Node, Int> {
@@ -14,7 +10,6 @@ private fun obtainPositions(input: List<String>): Map<Node, Int> {
     }
     return positions
 }
-
 
 private fun parseInput(positions: Map<Node, Int>): Graph {
     val nodes = mutableMapOf<Node, MutableList<Node>>()
@@ -62,35 +57,29 @@ private fun findPaths(graph: Graph, start: Node, positions: Map<Node, Int>): Lis
     return paths
 }
 
-private fun part1(input: List<String>): Int {
+private fun part(input: List<String>, part1: Boolean = true): Int {
     val positions = obtainPositions(input)
     val graph = parseInput(positions)
 
     return findStartNodes(positions).sumOf {
-        findPaths(graph, it, positions)
-            .flatten()
-            .filter { positions[it] == 9 }
-            .toSet()
-            .count()
-    }
-}
-
-private fun part2(input: List<String>): Int {
-    val positions = obtainPositions(input)
-    val graph = parseInput(positions)
-
-    return findStartNodes(positions).sumOf {
-        findPaths(graph, it, positions).size
+        val paths = findPaths(graph, it, positions)
+        if(!part1) paths.size
+        else {
+            paths.flatten()
+                .filter { positions[it] == 9 }
+                .toSet()
+                .count()
+        }
     }
 }
 
 fun main() {
     val testInput = readInput("Day10_test")
-    check(part1(testInput) == 36)
-    check(part2(testInput) == 81)
+    check(part(testInput) == 36)
+    check(part(testInput, false) == 81)
 
     val input = readInput("Day10")
-    check(part1(input) == 694)
-    check(part2(input) == 1497)
+    check(part(input) == 694)
+    check(part(input, false) == 1497)
 }
  
