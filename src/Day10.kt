@@ -15,19 +15,6 @@ private fun obtainPositions(input: List<String>): Map<Node, Int> {
     return positions
 }
 
-private fun printGraph(l: Int, h: Int, path: List<Node>, positions: Map<Node, Int>) {
-    for(i in 0 until l) {
-        for(j in 0 until h) {
-            if(path.contains(Node(i, j))) {
-                print(positions[Node(i,j)])
-            } else {
-                print(".")
-            }
-        }
-        println()
-    }
-    println("")
-}
 
 private fun parseInput(positions: Map<Node, Int>): Graph {
     val nodes = mutableMapOf<Node, MutableList<Node>>()
