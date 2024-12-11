@@ -1,6 +1,6 @@
-private fun part1(input: List<String>, loops: Int = 25): Long {
+private fun part(input: List<String>, loops: Int = 25): Long {
     val stones = input.first().split(" ").map { it.toLong() }
-    var stoneMap = stones.toSet().associateWith { stone -> stones.count { it == stone }.toLong() }.toMutableMap()
+    var stoneMap = stones.associateWith { stone -> stones.count { it == stone }.toLong() }.toMutableMap()
 
     repeat(loops) {
         val newStones = mutableMapOf<Long, Long>()
@@ -23,16 +23,13 @@ private fun part1(input: List<String>, loops: Int = 25): Long {
     return stoneMap.values.sum()
 }
 
-private fun part2(input: List<String>): Int {
-    return 0
-}
-
 fun main() {
     val testInput = readInput("Day11_test")
-    check(part1(testInput) == 55312L)
+    check(part(testInput) == 55312L)
+    check(part(testInput, 75) == 65601038650482)
 
     val input = readInput("Day11")
-    check(part1(input) == 186175L)
-    part1(input, 75).println()
+    check(part(input) == 186175L)
+    check(part(input, 75) ==220566831337810)
 }
  
