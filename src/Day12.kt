@@ -2,10 +2,7 @@ data class GardenPlot(val name: Char, val titles: List<Pair<Int, Int>>, val area
     val perimeter: Int
         get() {
             val directions = listOf(
-                Pair(-1, 0),
-                Pair(1, 0),
-                Pair(0, -1),
-                Pair(0, 1)
+                Pair(-1, 0), Pair(1, 0), Pair(0, -1), Pair(0, 1)
             )
 
             var perimeter = 0
@@ -32,10 +29,10 @@ data class GardenPlot(val name: Char, val titles: List<Pair<Int, Int>>, val area
                 if (nr !in titles && ndown !in titles) corners++
                 if (ndown !in titles && nl !in titles) corners++
                 if (nl !in titles && nup !in titles) corners++
-                if(Pair(r-1, c-1) !in titles && nup in titles && nl in titles) corners++
-                if(Pair(r-1, c+1) !in titles && nup in titles && nr in titles) corners++
-                if(Pair(r+1, c+1) !in titles && ndown in titles && nr in titles) corners++
-                if(Pair(r+1, c-1) !in titles && ndown in titles && nl in titles) corners++
+                if (Pair(r - 1, c - 1) !in titles && nup in titles && nl in titles) corners++
+                if (Pair(r - 1, c + 1) !in titles && nup in titles && nr in titles) corners++
+                if (Pair(r + 1, c + 1) !in titles && ndown in titles && nr in titles) corners++
+                if (Pair(r + 1, c - 1) !in titles && ndown in titles && nl in titles) corners++
 
             }
             return corners
@@ -48,13 +45,12 @@ private fun part(input: List<String>, isPart1: Boolean = true): Int {
 
     val allPlots = mutableListOf<GardenPlot>()
 
-    for(plantType in plantTypes) {
+    for (plantType in plantTypes) {
         val starterTitle = findPlant(map, plantType)
-        for(title in starterTitle) {
+        for (title in starterTitle) {
             val allTitles = expandTitles(map, title)
 
-            val sortedPairs = allTitles.sortedWith(compareBy<Pair<Int, Int>> { it.first }
-                .thenBy { it.second })
+            val sortedPairs = allTitles.sortedWith(compareBy<Pair<Int, Int>> { it.first }.thenBy { it.second })
 
             val garden = GardenPlot(plantType, sortedPairs, sortedPairs.size)
 
@@ -65,18 +61,18 @@ private fun part(input: List<String>, isPart1: Boolean = true): Int {
     }
     var p1 = 0
     var p2 = 0
-    for(plot in allPlots) {
+    for (plot in allPlots) {
         p1 += plot.area * plot.perimeter
         p2 += plot.area * plot.corners
     }
-    return if(isPart1) p1 else p2
+    return if (isPart1) p1 else p2
 }
 
 private fun findPlant(map: List<List<Char>>, plantType: Char): List<Pair<Int, Int>> {
     val pairs = mutableListOf<Pair<Int, Int>>()
-    for(row in map.indices) {
-        for(col in map[row].indices) {
-            if(plantType == map[row][col]) {
+    for (row in map.indices) {
+        for (col in map[row].indices) {
+            if (plantType == map[row][col]) {
                 pairs.add(Pair(row, col))
             }
         }
@@ -90,7 +86,7 @@ private fun expandTitles(map: List<List<Char>>, starter: Pair<Int, Int>): List<P
     val queue = mutableListOf<Pair<Int, Int>>()
     val visited = mutableSetOf<Pair<Int, Int>>()
     queue.add(starter)
-    while(queue.isNotEmpty()) {
+    while (queue.isNotEmpty()) {
         val extracted = queue.removeLast()
         visited.add(extracted)
         val nbs = checkNeighbors(map, extracted)
@@ -101,20 +97,14 @@ private fun expandTitles(map: List<List<Char>>, starter: Pair<Int, Int>): List<P
 }
 
 private fun checkNeighbors(map: List<List<Char>>, starter: Pair<Int, Int>): List<Pair<Int, Int>> {
-    val (r,c) = starter
+    val (r, c) = starter
     return listOfNotNull(
-        map.getOrNull(r + 1)?.getOrNull(c)?.let { Pair(r+1,c) },
-        map.getOrNull(r - 1)?.getOrNull(c)?.let { Pair(r-1,c) },
-        map.getOrNull(r)?.getOrNull(c + 1)?.let { Pair(r,c+1) },
-        map.getOrNull(r)?.getOrNull(c - 1)?.let { Pair(r,c-1) },
-    ).filter { (r,c) -> map.getOrNull(r)?.getOrNull(c) == map[starter.first][starter.second] }
-        .toSet()
-        .toList()
+        map.getOrNull(r + 1)?.getOrNull(c)?.let { Pair(r + 1, c) },
+        map.getOrNull(r - 1)?.getOrNull(c)?.let { Pair(r - 1, c) },
+        map.getOrNull(r)?.getOrNull(c + 1)?.let { Pair(r, c + 1) },
+        map.getOrNull(r)?.getOrNull(c - 1)?.let { Pair(r, c - 1) },
+    ).filter { (r, c) -> map.getOrNull(r)?.getOrNull(c) == map[starter.first][starter.second] }.toSet().toList()
 
-}
-
-private fun part2(input: List<String>): Int {
-    return 0
 }
 
 fun main() {
