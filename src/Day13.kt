@@ -3,17 +3,14 @@ import kotlin.math.abs
 private fun part1(input: List<String>, part1: Boolean = true): ULong {
     val regexXY = Regex("""X\+(\d+), Y\+(\d+)""")
     val prizeRegex = Regex("""X=(\d+), Y=(\d+)""")
-
-    var total: ULong = 0u
     val prizeOffset = 10000000000000
-    for (i in 0..input.lastIndex step 4) {
-        val (xa, ya) = obtainValues(regexXY, input[i])
-        val (xb, yb) = obtainValues(regexXY, input[i + 1])
-        val (xp, yp) = obtainValues(prizeRegex, input[i + 2])
 
-        total += calculateCost(xa, ya, xb, yb, if (part1) xp else xp + prizeOffset, if (part1) yp else yp + prizeOffset)
+    return input.chunked(4).sumOf { (i1, i2, i3, _) ->
+        val (xa, ya) = obtainValues(regexXY, i1)
+        val (xb, yb) = obtainValues(regexXY, i2)
+        val (xp, yp) = obtainValues(prizeRegex, i3)
+        calculateCost(xa, ya, xb, yb, if (part1) xp else xp + prizeOffset, if (part1) yp else yp + prizeOffset)
     }
-    return total
 }
 
 val obtainValues = { regex: Regex, input: String -> regex.find(input)?.groupValues!!.takeLast(2).map { it.toDouble() } }
@@ -36,12 +33,9 @@ private fun calculateCost(
     } else 0u
 }
 
-private fun part2(input: List<String>): Int {
-    return 0
-}
-
 fun main() {
     val testInput = readInput("Day13_test")
+    part1(testInput, true)
     check(part1(testInput) == 480.toULong())
     check(part1(testInput, false) == 875318608908.toULong())
 
