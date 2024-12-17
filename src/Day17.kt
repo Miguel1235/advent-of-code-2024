@@ -1,9 +1,5 @@
 import kotlin.math.pow
 
-//data class Reg(val name: Char, var value: Long = 0) {
-//    override fun toString() = "$name:$value"
-//}
-
 private enum class Opcode { ADV, BXL, BST, JNZ, BXC, OUT, BDV, CDV }
 
 private fun getDenominator(operand: Int, a: Long, b: Long, c: Long) =
@@ -18,25 +14,28 @@ private fun getComboValue(operand: Long, a: Long, b: Long, c: Long): Long {
         }
 }
 
-
-private fun part1(input: List<String>): String {
-    val program = input.last().split(":").last().trim().split(",").chunked(2).map { ins -> Pair(Opcode.entries.first { it.ordinal == ins[0].toInt() }, ins[1].toInt()) }
-    var (a, b, c) = input.take(3).map { it.split(":").last().trim().toLong() }
-
+private fun obtainOutput(
+    program: List<Pair<Opcode, Int>>,
+    registers: List<Long>,
+): String {
+    val (a,b,c) = registers
+    var a1 = a
+    var b1 = b
+    var c1 = c
     val output = mutableListOf<Long>()
     var instructionPointer = 0
     while (instructionPointer < program.size) {
         val (instruction, operand) = program[instructionPointer]
         when (instruction) {
-            Opcode.ADV -> a /= getDenominator(operand, a, b, c)
-            Opcode.BXL -> b = b.xor(operand.toLong())
-            Opcode.BST -> b = getComboValue(operand.toLong(), a, b, c) % 8
-            Opcode.BXC -> b = b.xor(c)
-            Opcode.OUT -> output.add(getComboValue(operand.toLong(), a, b, c) % 8)
-            Opcode.BDV -> b = a / getDenominator(operand, a, b, c)
-            Opcode.CDV -> c = a / getDenominator(operand, a, b, c)
+            Opcode.ADV -> a1 /= getDenominator(operand, a1, b1, c1)
+            Opcode.BXL -> b1 = b1.xor(operand.toLong())
+            Opcode.BST -> b1 = getComboValue(operand.toLong(), a1, b1, c1) % 8
+            Opcode.BXC -> b1 = b1.xor(c1)
+            Opcode.OUT -> output.add(getComboValue(operand.toLong(), a1, b1, c1) % 8)
+            Opcode.BDV -> b1 = a1 / getDenominator(operand, a1, b1, c1)
+            Opcode.CDV -> c1 = a1 / getDenominator(operand, a1, b1, c1)
             Opcode.JNZ -> {
-                if (a == 0L) break
+                if (a1 == 0L) break
                 instructionPointer = operand
                 continue
             }
@@ -46,18 +45,49 @@ private fun part1(input: List<String>): String {
     return output.joinToString(separator = ",")
 }
 
-private fun part2(input: List<String>): Int {
-    return 0
+private val obtainProgram = { input: List<String> -> input.last().split(":").last().trim().split(",").chunked(2).map { ins -> Pair(Opcode.entries.first { it.ordinal == ins[0].toInt() }, ins[1].toInt()) } }
+private val obtainRegisters = { input: List<String >-> input.take(3).map { it.split(":").last().trim().toLong() } }
+
+
+private fun part1(program: List<Pair<Opcode, Int>>, registers: List<Long>): String {
+    return obtainOutput(program, registers)
+}
+
+private fun part2(program: List<Pair<Opcode, Int>>, registers: List<Long>): Long {
+    val programString = program.map { listOf(it.first.ordinal, it.second)}.flatten().joinToString(",")
+
+
+    val min = 8.0.pow(program.size*2-1).toLong()
+    val max = 8.0.pow(program.size*2).toLong()
+
+    val (_, b,c) = registers
+
+//    println("min: $min max: $max")
+
+    var current = min
+    while(current < max) {
+        val result = obtainOutput(program, listOf(current,b,c))
+//        println("(a:$current)=$result")
+        if(programString == result) break
+        current++
+    }
+//    println("The a to match the same program is $current")
+
+    return current
 }
 
 fun main() {
     val testInput = readInput("Day17_test")
+    val testProgram = obtainProgram(testInput)
+    val testRegisters = obtainRegisters(testInput)
 
-    check(part1(testInput) == "4,2,5,6,7,7,7,7,3,1,0")
-//    check(part2(testInput) == 0)
+    check(part1(testProgram, testRegisters) == "4,6,3,5,6,3,5,2,1,0")
+    part2(testProgram, testRegisters).println()
 
     val input = readInput("Day17")
-    check(part1(input) == "1,5,7,4,1,6,0,3,0")
-//    check(part2(input) == 0)
+    val program = obtainProgram(input)
+    val registers = obtainRegisters(input)
+    check(part1(program, registers) == "1,5,7,4,1,6,0,3,0")
+//    part2(program, registers)
 }
  
