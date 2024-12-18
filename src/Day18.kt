@@ -1,7 +1,5 @@
 private class Gh(private val map: List<List<Vertex>>) {
-    val directions = listOf(
-        Pair(0, -1), Pair(1, 0), Pair(0, 1), Pair(-1, 0)
-    )
+    val directions = listOf(Pair(0, -1), Pair(1, 0), Pair(0, 1), Pair(-1, 0))
 
     val nodes = buildMap {
         map.forEachIndexed { r, row ->
@@ -33,9 +31,7 @@ private class Gh(private val map: List<List<Vertex>>) {
     }
 }
 
-private data class Vertex(val name: Char, val position: Pair<Int, Int>) {
-    override fun toString() = "$name"
-}
+private data class Vertex(val name: Char, val position: Pair<Int, Int>)
 
 private fun part1(input: List<String>, size: Int = 70, bytes: Int = 1024): Int {
     val reducedBytes = reduceBytes(input)
@@ -43,8 +39,7 @@ private fun part1(input: List<String>, size: Int = 70, bytes: Int = 1024): Int {
     return Gh(grid).bfs(grid[0][0], grid[size][size]).size - 1
 }
 
-val reduceBytes = { input: List<String> ->
-    input.map {
+val reduceBytes = { input: List<String> -> input.map {
         val (r, c) = it.split(",").map { it.toInt() }
         Pair(r, c)
     }
@@ -64,8 +59,7 @@ private fun part2(input: List<String>, size: Int = 70): Pair<Int, Int> {
     }
 }
 
-private val obtainGrid = { size: Int, reducedBytes: List<Pair<Int, Int>> ->
-    List(size + 1) { r ->
+private val obtainGrid = { size: Int, reducedBytes: List<Pair<Int, Int>> -> List(size + 1) { r ->
         List(size + 1) { c ->
             val position = c to r
             Vertex(if (position in reducedBytes) '#' else '.', position)
