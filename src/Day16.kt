@@ -1,6 +1,6 @@
 import java.util.*
 
-val directions = listOf(
+private val directions = listOf(
     Pair(0,-1),
     Pair(1,0),
     Pair(0,1),
